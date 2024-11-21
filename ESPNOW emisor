@@ -1,0 +1,23 @@
+import network
+import espnow
+
+# Inicializa la interfaz WiFi en modo STA (estación)
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+
+# Inicializa ESP-NOW
+esp = espnow.ESPNow()
+esp.init()
+
+# Añade la dirección MAC del receptor
+peer_mac = b'\x24\x6f\x28\xxx\xxx\xxx'  # Cambia a la MAC del receptor
+esp.add_peer(peer_mac)
+
+while True:
+    try:
+        # Envía un mensaje
+        mensaje = "Hola desde el emisor"
+        esp.send(peer_mac, mensaje, True)
+        print(f"Mensaje enviado: {mensaje}")
+    except OSError as e:
+        print(f"Error al enviar: {e}")
